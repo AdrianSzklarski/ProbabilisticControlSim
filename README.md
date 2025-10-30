@@ -1,64 +1,90 @@
-ProbabilisticControlSim
-Probabilistic Cost Analysis in Stochastic Control Systems
+<!-- PROJECT TITLE -->
+<h1 align="center">🧠 ProbabilisticControlSim</h1>
+<p align="center">
+  <em>Probabilistic Cost Analysis in Stochastic Control Systems</em>  
+  <br>
+  <strong>Submitted to IEEE Control Systems Letters (L-CSS), 2025</strong>
+</p>
 
-This repository contains the full Python implementation and simulation results accompanying the article:
-"Probabilistic Cost Analysis in Stochastic Control Systems"
-submitted to IEEE Control Systems Letters (L-CSS).
+---
 
-📘 Project Overview
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue.svg?logo=python&logoColor=white" alt="Python Version"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a>
+  <a href="https://ieeexplore.ieee.org/"><img src="https://img.shields.io/badge/IEEE-L--CSS-lightgrey.svg?logo=ieee" alt="IEEE L-CSS"></a>
+  <a href="https://github.com/AdrianSzklarski/ProbabilisticControlSim/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg?logo=github" alt="Build Status"></a>
+  <a href="#"><img src="https://img.shields.io/badge/status-active-success.svg" alt="Status"></a>
+</p>
 
-This project demonstrates a reproducible framework for analyzing the probabilistic control cost in stochastic dynamic systems.
-The simulation combines:
+---
 
-Linear Quadratic Regulator (LQR) control,
+## 📘 Overview
 
-Kalman filter–based state estimation, and
+This repository provides a **Python implementation and simulation framework** for analyzing **probabilistic control cost** in **stochastic dynamic systems**.
 
-Monte Carlo simulation
-to evaluate the expected cost E[J] and variance Var[J] of the control system under process and measurement noise.
+It integrates:
+- 🎯 **Linear Quadratic Regulator (LQR)** control  
+- 🔍 **Kalman Filter**–based state estimation  
+- 🎲 **Monte Carlo Simulation**
 
-The goal is to connect probabilistic runtime analysis with stochastic optimal control and to quantify how randomness affects stability and computational efficiency.
+to evaluate:
+- Expected cost: **E[J]**  
+- Variance: **Var[J]**  
+under random process and measurement disturbances.
 
-🧩 System Model
+> The project connects *probabilistic runtime analysis* with *stochastic optimal control* — quantifying how randomness influences stability, cost, and performance.
 
-The system follows a 2D stochastic dynamic model:
+---
 
-x_dot = A x + B u + η(t)
+## 🧩 System Model
+
+The stochastic system follows:
+
+\[
+\dot{x} = A x + B u + \eta(t)
+\]
+\[
 y = C x + v(t)
+\]
 
+where:
 
-where
+| Symbol | Description |
+|---------|-------------|
+| \( x = [position, velocity]^T \) | System state |
+| \( u = -K \hat{x} \) | LQR control law |
+| \( \eta(t) \sim \mathcal{N}(0, Q_w) \) | Process noise |
+| \( v(t) \sim \mathcal{N}(0, R_v) \) | Measurement noise |
+| \( \hat{x} \) | Kalman filter estimate |
 
-x = [position, velocity]^T
+The **cost function**:
+\[
+J = \int (x^T Q x + u^T R u) \, dt
+\]
 
-u = -K * x_hat — feedback control law (LQR)
+is approximated numerically over the simulation horizon.
 
-η(t) — process noise ~ N(0, Qw)
+---
 
-v(t) — measurement noise ~ N(0, Rv)
+## ⚙️ Simulation Parameters
 
-x_hat — estimated state from the Kalman filter
+| **Parameter** | **Value** |
+|----------------|-----------|
+| Simulation time (T) | 5.0 s |
+| Time step (dt) | 0.01 s |
+| Monte Carlo trials | 300 |
+| Process noise covariance (Qw) | 1e-4 × I |
+| Measurement noise covariance (Rv) | 1e-2 × I |
+| Cost matrices (Q, R) | Q = diag(10, 1), R = [0.1] |
 
-The cost function used for evaluation is:
+---
 
-J = ∫ (xᵀ Q x + uᵀ R u) dt
+## 🧮 Core Python Script
 
+**Main file:** `montecarlo_lqr_kalman.py`
 
-which is approximated numerically over the simulation horizon.
-
-⚙️ Simulation Parameters
-Parameter	Value
-Simulation time (T)	5.0 s
-Time step (dt)	0.01 s
-Number of Monte Carlo trials	300
-Process noise covariance (Qw)	1e-4 * I
-Measurement noise covariance (Rv)	1e-2 * I
-Cost matrices (Q, R)	Q = diag(10, 1), R = [0.1]
-🧮 Core Python Script
-
-Main script file: montecarlo_lqr_kalman.py
-
-# Example of usage
+### Example usage
+```python
 from probabilistic_control import monte_carlo_simulation_vectorized
 
 A = [[0.0, 1.0],
@@ -79,87 +105,12 @@ Rcost = [[0.1]]
 
 x0 = [1.0, 0.0]
 
-results = monte_carlo_simulation_vectorized(A, B, C, Qw, Rv, Qcost, Rcost, x0, T=5.0, dt=0.01, trials=300)
+results = monte_carlo_simulation_vectorized(
+    A, B, C, Qw, Rv, Qcost, Rcost,
+    x0, T=5.0, dt=0.01, trials=300
+)
 
 print("Mean cost:", results["mean"])
 print("Variance:", results["var"])
 print("95% CI:", results["ci95"])
 
-
-This will automatically:
-
-compute LQR gains (via Riccati equation),
-
-apply a discrete Kalman filter,
-
-run 300 Monte Carlo trials,
-
-generate convergence and distribution plots,
-
-print summary statistics.
-
-📊 Example Output
-Mean cost: 44.7020
-Variance: 12.7273
-95% Confidence Interval: (44.2983, 45.1057)
-
-
-Generated figures:
-
-histogram_costs.png – distribution of J
-
-convergence_loglog.png – convergence of mean estimator
-
-variance_vs_trials.png – sample variance vs N
-
-trajectories_examples.png – true vs estimated state trajectories
-
-📁 Repository Structure
-ProbabilisticControlSim/
-│
-├── montecarlo_lqr_kalman.py        # main simulation script
-├── probabilistic_control.py         # LQR, Kalman, Monte Carlo core functions
-├── results/                         # generated data and plots
-├── README.md                        # this file
-└── LICENSE.txt                      # license information
-
-🚀 How to Run
-
-Install dependencies:
-
-pip install numpy scipy matplotlib pandas
-
-
-Run the main script:
-
-python montecarlo_lqr_kalman.py
-
-
-View generated results in the results/ folder.
-
-📈 Citation
-
-If you use this code or framework in academic work, please cite:
-
-[Author], "Probabilistic Cost Analysis in Stochastic Control Systems,"
-IEEE Control Systems Letters (L-CSS), 2025.
-
-📜 License
-
-This project is released under the MIT License.
-You are free to use, modify, and distribute the code with appropriate credit.
-
-🧠 Notes
-
-The simulation confirms that Monte Carlo mean convergence follows approximately O(1/√N).
-
-The average cost and variance remain stable for N ≥ 100 trials.
-
-The framework is easily extensible to higher-dimensional systems or nonlinear control problems.
-
-Maintainer: [Your Name]
-Contact: [Your Email]
-Version: 1.0 — October 2025
-# ProbabilisticControlSim
-# ProbabilisticControlSim
-# ProbabilisticControlSim
