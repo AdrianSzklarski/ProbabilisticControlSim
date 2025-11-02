@@ -1,0 +1,80 @@
+# ==============================================
+# Python + PyCharm .gitignore
+# ==============================================
+
+# ---- PYTHON ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Unit test / coverage reports
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+pytest_cache/
+.pytest_cache/
+
+# ---- PYCHARM / IDE ----
+# JetBrains IDEs (PyCharm, IntelliJ)
+.idea/
+*.iml
+*.iws
+out/
+
+# ---- OS FILES ----
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ---- LOGS & MISC ----
+*.log
+logs/
+*.tmp
+*.bak
+*.swp
+
+# ---- CUSTOM IGNORE SECTION ----
+# Add your own files/folders you don't want to commit below.
+# Example:
+# secrets/
+# local_config.json
+# api_keys.txt
+# private_data/
+# temp_data/
+# experimental_scripts/
+
+# END OF FILE

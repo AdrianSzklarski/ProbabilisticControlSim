@@ -1,0 +1,41 @@
+# ==============================================
+# Python Project .gitattributes
+# ==============================================
+
+# Default to LF line endings for all text files
+* text=auto eol=lf
+
+# Ensure Git uses UTF-8 for text encoding
+*.py text working-tree-encoding=UTF-8
+*.md text working-tree-encoding=UTF-8
+*.txt text working-tree-encoding=UTF-8
+
+# Handle Jupyter notebooks cleanly in diffs
+*.ipynb linguist-language=Jupyter Notebook
+*.ipynb diff=ipynb
+
+# Treat these as binary (no diffs)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.7z binary
+*.pkl binary
+
+# OS-specific files (just to be safe)
+.DS_Store binary
+Thumbs.db binary
+
+# ----------------------------------------------
+# CUSTOM SECTION
+# You can add special rules here if you want Git
+# to handle specific files differently.
+# Example:
+# *.csv text eol=lf
+# *.bat text eol=crlf
+# ----------------------------------------------
